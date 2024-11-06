@@ -64,24 +64,35 @@ students = [Student(name, gender, grades) for name, gender, grades in students_d
 # Sort students by average score in descending order
 students_sorted = sorted(students, key=lambda student: student.calculate_average(), reverse=True)
 
+# Define position statuses based on average score
+def get_position_status(average):
+    if average > 85:
+        return "Top Performer"
+    elif average >= 50:
+        return "Average Performer"
+    else:
+        return "Needs Improvement"
+
 # Prepare the table for each student's individual report
 for student in students_sorted:
     # Calculate student's average and status
     avg = student.calculate_average()
     status = "Promoted" if avg >= 50 else "Repeat"
+    position_status = get_position_status(avg)
     
     # Additional recommendation for top students
     if avg >= 90:
         status += " | Recommended for Advanced Modules"
     
     # Create a table for each student
-    headers = ["Name", "Gender", "Physics", "Chemistry", "Biology", "English", "Average", "Status"]
+    headers = ["Name", "Gender", "Physics", "Chemistry", "Biology", "English", "Average", "Status", "Position Status"]
     row = [
         student.name,
         student.gender,
         *student.grades,  # Physics, Chemistry, Biology, English
         avg,
-        status
+        status,
+        position_status
     ]
     
     # Print the individual report using tabulate
