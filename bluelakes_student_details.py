@@ -2,10 +2,10 @@
 # bluelakes_student_details.py
 
 from student import Student
+from tabulate import tabulate  # Importing tabulate to format the table
 
-# List of students and their grades
+# List of students and their grades (including more varied data for demonstration)
 students_data = [
-    # Name, Gender, Grades in [Physics, Chemistry, Biology, English]
     ("BIZIYAREMYE Fabien", "Male", [98, 55, 60, 78]),
     ("NYIRAMANA Astherie", "Female", [43, 70, 73, 69]),
     ("HABANABASHAKA Jean Claude", "Male", [70, 90, 70, 87]),
@@ -24,8 +24,7 @@ students_data = [
     ("Marie Josee MUKATUYISENGE", "Female", [78, 80, 90, 98]),
     ("NYIRAZANINKA Micheline", "Female", [78, 80, 90, 98]),
     ("TWAGIRAYEZU Jean Marie Vianney", "Female", [78, 80, 90, 98]),
-    
-    # More students added with varied and unrelated marks
+    # More students with varied marks
     ("KAGABO Donatien", "Male", [65, 45, 50, 68]),
     ("MURORANKWAVU Alice", "Female", [90, 88, 92, 85]),
     ("SABINIMANA Jean Pierre", "Male", [50, 60, 55, 70]),
@@ -65,8 +64,31 @@ students = [Student(name, gender, grades) for name, gender, grades in students_d
 # Sort students by average score in descending order
 students_sorted = sorted(students, key=lambda student: student.calculate_average(), reverse=True)
 
-# Output the sorted report
+# Prepare the table for report generation
+table = []
+
+# Adding headers
+headers = ["Rank", "Name", "Gender", "Physics", "Chemistry", "Biology", "English", "Average", "Status"]
+
+# Collecting data for each student
 for rank, student in enumerate(students_sorted, start=1):
-    print(f"Rank {rank}:")
-    print(student.get_report())
-    print("=" * 50)  # Separator between reports
+    avg = student.calculate_average()
+    status = "Promoted" if avg >= 50 else "Repeat"
+    
+    # Additional recommendation for top students
+    if avg >= 90:
+        status += " | Recommended for Advanced Modules"
+    
+    row = [
+        rank,
+        student.name,
+        student.gender,
+        *student.grades,  # Physics, Chemistry, Biology, English
+        avg,
+        status
+    ]
+    
+    table.append(row)
+
+# Printing the report using tabulate
+print(tabulate(table, headers=headers, tablefmt="fancy_grid"))
