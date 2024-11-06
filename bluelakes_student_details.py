@@ -64,14 +64,9 @@ students = [Student(name, gender, grades) for name, gender, grades in students_d
 # Sort students by average score in descending order
 students_sorted = sorted(students, key=lambda student: student.calculate_average(), reverse=True)
 
-# Prepare the table for report generation
-table = []
-
-# Adding headers
-headers = ["Rank", "Name", "Gender", "Physics", "Chemistry", "Biology", "English", "Average", "Status"]
-
-# Collecting data for each student
-for rank, student in enumerate(students_sorted, start=1):
+# Prepare the table for each student's individual report
+for student in students_sorted:
+    # Calculate student's average and status
     avg = student.calculate_average()
     status = "Promoted" if avg >= 50 else "Repeat"
     
@@ -79,8 +74,9 @@ for rank, student in enumerate(students_sorted, start=1):
     if avg >= 90:
         status += " | Recommended for Advanced Modules"
     
+    # Create a table for each student
+    headers = ["Name", "Gender", "Physics", "Chemistry", "Biology", "English", "Average", "Status"]
     row = [
-        rank,
         student.name,
         student.gender,
         *student.grades,  # Physics, Chemistry, Biology, English
@@ -88,7 +84,7 @@ for rank, student in enumerate(students_sorted, start=1):
         status
     ]
     
-    table.append(row)
-
-# Printing the report using tabulate
-print(tabulate(table, headers=headers, tablefmt="fancy_grid"))
+    # Print the individual report using tabulate
+    print(f"Student Report for {student.name}")
+    print(tabulate([row], headers=headers, tablefmt="fancy_grid"))
+    print("\n" + "="*50 + "\n")  # Separator between reports
